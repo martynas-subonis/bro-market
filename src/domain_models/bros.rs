@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 use crate::domain_models::agent::{Agent, Strategies};
 
-const BRO_1_NAME: &str = "Anthony The Crypto King";
-const BRO_2_NAME: &str = "Sam The Wall Street Intern";
-const BRO_3_NAME: &str = "John The Reddit Wise";
+const BRO_1_NAME: &str = "Chad The Crypto King";
+const BRO_2_NAME: &str = "Ben The Wall Street Intern";
+const BRO_3_NAME: &str = "Kyle The Reddit Wise";
 const DEFAULT_STARTING_CASH: f64 = 10000.0;
 
 

@@ -83,7 +83,7 @@ pub fn slopes_match(slopes: [f64; 6]) -> bool {
     return true;
 }
 
-const ALLOWED_RELATIVE_DIFF: f64 = 0.2;
+const ALLOWED_RELATIVE_DIFF: f64 = 0.3;
 
 pub fn exceeds_allowed_rel_diff(k0: f64, k1: f64) -> bool {
     return (
