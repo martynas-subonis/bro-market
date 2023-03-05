@@ -1,8 +1,8 @@
-use crate::util::windows::{get_available_windows, LARGE_WINDOW, MEDIUM_WINDOW, SMALL_WINDOW};
+use crate::util::windows::{get_available_windows};
 use crate::util::partitions::{get_partitions};
 use linreg::{linear_regression};
 
-const ALLOWED_RELATIVE_DIFF: f64 = 0.3;
+const ALLOWED_RELATIVE_DIFF: f64 = 0.2;
 
 pub fn match_series(price_series: &Vec<f64>, partitions_nums: usize, matcher: fn(Vec<f64>) -> bool) -> bool {
     let n = price_series.len();

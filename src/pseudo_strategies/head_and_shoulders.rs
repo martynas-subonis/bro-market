@@ -1,7 +1,4 @@
-use crate::util::windows::{get_available_windows, LARGE_WINDOW, MEDIUM_WINDOW, SMALL_WINDOW};
-use crate::util::partitions::{get_partitions};
 use crate::util::match_series::{match_series, exceeds_allowed_rel_diff};
-use linreg::{linear_regression};
 
 const HEAD_AND_SHOULDERS_PARTITIONS: usize = 6;
 

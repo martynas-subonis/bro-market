@@ -9,7 +9,10 @@ pub struct Market {
 
 impl Market {
     pub fn new() -> Market {
-        let stocks = vec![Stock::default(); NUMBER_OF_STOCKS];
+        let mut stocks: Vec<Stock> = Vec::new();
+        for _ in 0..NUMBER_OF_STOCKS {
+            stocks.push(Stock::default())
+        }
         Market { stocks }
     }
 }

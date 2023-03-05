@@ -15,7 +15,7 @@ pub enum Strategies {
 #[derive(Debug, PartialEq)]
 pub struct Trade {
     pub id: String,
-    pub amount: f64,
+    pub units: f64,
     pub time: usize,
 }
 
@@ -35,21 +35,21 @@ impl Agent<'_> {
         let fee_amount = TRADING_FEE * trade_amount;
         self.cash -= trade_amount;
 
-        let buy_amount = (trade_amount - fee_amount) / stock.price;
+        let buy_units = (trade_amount - fee_amount) / stock.price;
         let stock_id = stock.id.clone();
         let stock_id_cl = stock_id.clone();
 
         if self.portfolio.contains_key(&stock_id) {
             if let Some(val) = self.portfolio.get_mut(&stock_id) {
-                *val = *val + buy_amount;
+                *val = *val + buy_units;
             }
         } else {
-            self.portfolio.insert(stock_id, buy_amount);
+            self.portfolio.insert(stock_id, buy_units);
         }
 
         self.trades.push(Trade {
             id: stock_id_cl,
-            amount: buy_amount,
+            units: buy_units,
             time,
         });
     }
@@ -59,18 +59,33 @@ impl Agent<'_> {
         let stock_id_clone = stock_id.clone();
 
         if self.portfolio.contains_key(&stock_id) {
-            if let Some(val) = self.portfolio.get_mut(&stock_id) {
-                let sell_amount = *val * stock.price;
-                let fee_amount = TRADING_FEE * sell_amount;
-                self.cash += sell_amount - fee_amount;
-                self.trades.push(Trade {
-                    id: stock_id,
-                    amount: -sell_amount,
-                    time,
-                });
-                self.portfolio.remove(&stock_id_clone);
-            }
+            let sell_units = self.portfolio.get_mut(&stock_id).unwrap();
+            let sell_amount = *sell_units * stock.price;
+            let fee_amount = TRADING_FEE * sell_amount;
+            self.cash += sell_amount - fee_amount;
+            self.trades.push(Trade {
+                id: stock_id,
+                units: - *sell_units,
+                time,
+            });
+            self.portfolio.remove(&stock_id_clone);
         }
+    }
+
+    pub fn get_net_worth(self, stocks: &Vec<Stock>) -> f64 {
+        let mut net_worth = self.cash;
+        let stock_price_map: HashMap<String, f64> = stocks
+            .into_iter()
+            .map(|s| (s.id.clone(), s.price))
+            .collect();
+
+        for k in self.portfolio.keys() {
+            let amount = self.portfolio.get(k).unwrap();
+            let price = stock_price_map.get(k).unwrap();
+            net_worth += amount * price;
+        }
+
+        return net_worth;
     }
 }
 
@@ -100,7 +115,7 @@ mod tests {
         assert!(agent.trades.iter().eq(
             vec![Trade {
                 id: "test".to_string(),
-                amount: 995.0,
+                units: 995.0,
                 time: 1,
             }].iter()
         ));
@@ -172,5 +187,33 @@ mod tests {
         };
         agent.sell(&stock_two, 1);
         assert_eq!(agent.cash, initial_cash);
+    }
+
+    #[test]
+    fn get_net_worth_calculates_net_worth_correctly() {
+        let stock_one = Stock {
+            id: "test_1".to_string(),
+            price: 2.0,
+            history: vec![],
+        };
+        let stock_two = Stock {
+            id: "test_2".to_string(),
+            price: 1.0,
+            history: vec![],
+        };
+        let stocks = Vec::from([stock_one.clone(), stock_two.clone()]);
+        let initial_cash = 1000.0;
+        let initial_amount = 100.0;
+        let mut agent = Agent {
+            name: "test",
+            portfolio: HashMap::from([(stock_one.id.clone(), initial_amount), (stock_two.id.clone(), initial_amount)]),
+            cash: initial_cash,
+            strategies: HashSet::new(),
+            trades: Vec::new(),
+        };
+
+        let actual_net_worth = agent.get_net_worth(&stocks);
+
+        assert_eq!(actual_net_worth, 1300.0)
     }
 }
