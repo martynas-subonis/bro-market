@@ -1,10 +1,10 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use crate::domain_models::stock::Stock;
 
 const TRADE_FRACTION: f64 = 0.4;
 const TRADING_FEE: f64 = 0.005;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Hash)]
 pub enum Strategies {
     HeadAndShoulders,
     ReverseHeadAndShoulders,
@@ -23,7 +23,7 @@ pub struct Agent<'a> {
     pub name: &'a str,
     pub portfolio: HashMap<String, f64>,
     pub cash: f64,
-    pub strategies: Vec<Strategies>,
+    pub strategies: HashSet<Strategies>,
     pub trades: Vec<Trade>,
 }
 
@@ -84,13 +84,13 @@ mod tests {
             name: "test",
             portfolio: Default::default(),
             cash: initial_cash,
-            strategies: vec![],
-            trades: vec![],
+            strategies: HashSet::new(),
+            trades: Vec::new(),
         };
         let stock = Stock {
             id: "test".to_string(),
             price: 2.0,
-            history: vec![],
+            history: Vec::new(),
         };
         agent.buy(&stock, 1);
         assert_eq!(agent.portfolio[&stock.id], 995.0);
@@ -117,8 +117,8 @@ mod tests {
             name: "test",
             portfolio: HashMap::from([(stock.id.clone(), initial_amount)]),
             cash: initial_cash,
-            strategies: vec![],
-            trades: vec![],
+            strategies: HashSet::new(),
+            trades: Vec::new(),
         };
         let time = 1 as usize;
         agent.buy(&stock, 1);
@@ -139,8 +139,8 @@ mod tests {
             name: "test",
             portfolio: HashMap::from([(stock.id.clone(), initial_amount)]),
             cash: initial_cash,
-            strategies: vec![],
-            trades: vec![],
+            strategies: HashSet::new(),
+            trades: Vec::new(),
         };
         agent.sell(&stock, 1);
         assert!(!agent.portfolio.contains_key(&stock.id));
@@ -165,8 +165,8 @@ mod tests {
             name: "test",
             portfolio: HashMap::from([(stock_one.id, initial_amount)]),
             cash: initial_cash,
-            strategies: vec![],
-            trades: vec![],
+            strategies: HashSet::new(),
+            trades: Vec::new(),
         };
         agent.sell(&stock_two, 1);
         assert_eq!(agent.cash, initial_cash);
