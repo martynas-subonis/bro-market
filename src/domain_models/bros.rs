@@ -13,7 +13,7 @@ pub fn get_bros() -> Vec<Agent<'static>> {
             name: BRO_1_NAME,
             portfolio: HashMap::new(),
             cash: DEFAULT_STARTING_CASH,
-            strategies: vec![Strategies::HeadAndShoulders],
+            strategies: vec![Strategies::HeadAndShoulders, Strategies::ReverseHeadAndShoulders],
             trades: Vec::new(),
         },
         Agent {

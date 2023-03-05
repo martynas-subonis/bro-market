@@ -1,3 +1,3 @@
-pub mod windows;
 pub mod head_and_shoulders;
-pub mod partition;
+pub mod reverse_head_and_shoulders;
+pub mod execute_strategy;

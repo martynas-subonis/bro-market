@@ -6,7 +6,8 @@ const TRADING_FEE: f64 = 0.005;
 
 #[derive(Debug, PartialEq)]
 pub enum Strategies {
-    HeadAndShoulders
+    HeadAndShoulders,
+    ReverseHeadAndShoulders,
 }
 
 #[derive(Debug, PartialEq)]

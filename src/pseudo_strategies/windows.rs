@@ -1,5 +1,0 @@
-const SCALE_FACTOR: usize = 36;
-
-pub const SMALL_WINDOW: usize = SCALE_FACTOR;
-pub const MEDIUM_WINDOW: usize = SMALL_WINDOW * SCALE_FACTOR;
-pub const LARGE_WINDOW: usize = MEDIUM_WINDOW * SCALE_FACTOR;
