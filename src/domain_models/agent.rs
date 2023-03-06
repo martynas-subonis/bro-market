@@ -72,7 +72,7 @@ impl Agent<'_> {
         }
     }
 
-    pub fn get_net_worth(self, stocks: &Vec<Stock>) -> f64 {
+    pub fn get_net_worth(&self, stocks: &Vec<Stock>) -> f64 {
         let mut net_worth = self.cash;
         let stock_price_map: HashMap<String, f64> = stocks
             .into_iter()
