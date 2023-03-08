@@ -6,12 +6,12 @@ mod stats;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::collections::HashMap;
-use crate::domain_models::market::Market;
 use crate::domain_models::bros::{CHAD_NAME, BEN_NAME, get_bros};
+use crate::domain_models::stock::get_stock;
 use crate::pseudo_strategies::execute_strategy::execute_strategy;
 use crate::stats::containers::AgentRunStats;
 
-const NUMBER_OF_SIMULATIONS: usize = 100;
+const NUMBER_OF_SIMULATIONS: usize = 20;
 const NUMBER_OF_DAYS: usize = 1000;
 const NUMBER_OF_HOURS: usize = 24 * NUMBER_OF_DAYS;
 
@@ -27,11 +27,11 @@ fn main() {
     for _ in 0..NUMBER_OF_SIMULATIONS {
         let stats_clone = Arc::clone(&atomic_stats);
         let handle = thread::spawn(move || {
-            let mut market = Market::new();
+            let mut stocks = get_stock();
             let mut bros = get_bros();
 
             for h in 1..NUMBER_OF_HOURS {
-                for stock in market.stocks.iter_mut() {
+                for stock in stocks.iter_mut() {
                     stock.mv();
                     for bro in bros.iter_mut() {
                         execute_strategy(stock, bro, h);
@@ -43,7 +43,7 @@ fn main() {
             for bro in bros {
                 let run_stats = AgentRunStats {
                     trade_count: bro.trades.len(),
-                    net_worth: bro.get_net_worth(&market.stocks),
+                    net_worth: bro.get_net_worth(&stocks),
                 };
 
                 let bro_stats = stats.get_mut(bro.name).unwrap();
@@ -53,7 +53,6 @@ fn main() {
         handles.push(handle);
     }
 
-    // Wait for threads to finish.
     for handle in handles {
         handle.join().unwrap();
     }
