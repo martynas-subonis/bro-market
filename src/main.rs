@@ -3,10 +3,9 @@ mod domain_models;
 mod pseudo_strategies;
 mod stats;
 
-use std::sync::{Arc, Mutex};
-use std::thread;
+use rayon::prelude::*;
 use std::collections::HashMap;
-use crate::domain_models::bros::{CHAD_NAME, BEN_NAME, get_bros};
+use crate::domain_models::bros::{get_bros};
 use crate::domain_models::stock::get_stock;
 use crate::pseudo_strategies::execute_strategy::execute_strategy;
 use crate::stats::containers::AgentRunStats;
@@ -17,16 +16,9 @@ const NUMBER_OF_HOURS: usize = 24 * NUMBER_OF_DAYS;
 
 
 fn main() {
-    let mut mutex_stats: HashMap<&str, Vec<AgentRunStats>> = get_bros()
-        .iter()
-        .map(|b| (b.name, Vec::new()))
-        .collect();
-    let atomic_stats = Arc::new(Mutex::new(mutex_stats));
-    let mut handles = vec![];
-
-    for _ in 0..NUMBER_OF_SIMULATIONS {
-        let stats_clone = Arc::clone(&atomic_stats);
-        let handle = thread::spawn(move || {
+    let result: Vec<AgentRunStats> = (0..NUMBER_OF_SIMULATIONS)
+        .into_par_iter()
+        .map(|_| {
             let mut stocks = get_stock();
             let mut bros = get_bros();
 
@@ -38,24 +30,18 @@ fn main() {
                     }
                 }
             }
-
-            let mut stats = stats_clone.lock().unwrap();
-            for bro in bros {
-                let run_stats = AgentRunStats {
+            let stats: Vec<AgentRunStats> = bros
+                .iter()
+                .map(|bro| AgentRunStats {
+                    name: bro.name,
                     trade_count: bro.trades.len(),
                     net_worth: bro.get_net_worth(&stocks),
-                };
+                })
+                .collect();
+            return stats;
+        })
+        .flatten()
+        .collect();
 
-                let bro_stats = stats.get_mut(bro.name).unwrap();
-                bro_stats.push(run_stats);
-            }
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().unwrap();
-    }
-
-    println!("Stats: {:?}", *atomic_stats.lock().unwrap());
+    println!("Stats: {:?}", result);
 }
