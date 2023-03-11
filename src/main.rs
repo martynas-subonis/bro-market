@@ -3,7 +3,7 @@ mod pseudo_strategies;
 mod util;
 
 use crate::domain_models::bros::get_bros;
-use crate::domain_models::stock::get_stock;
+use crate::domain_models::stock::get_stocks;
 use crate::pseudo_strategies::execute_strategy::execute_strategy;
 use rayon::prelude::*;
 use std::collections::HashMap;
@@ -22,7 +22,7 @@ fn main() {
     let result: HashMap<&str, Vec<AgentRunStats>> = (0..NUMBER_OF_SIMULATIONS)
         .into_par_iter()
         .map(|_| {
-            let mut stocks = get_stock();
+            let mut stocks = get_stocks();
             let mut bros = get_bros();
 
             for h in 1..NUMBER_OF_HOURS {
