@@ -1,6 +1,9 @@
 pub fn get_partitions(window: usize, series_len: usize, partitions_num: usize) -> Vec<usize> {
     if window % partitions_num != 0 {
-        panic!("{}", format!("Window must be divisible by {}.", partitions_num));
+        panic!(
+            "{}",
+            format!("Window must be divisible by {}.", partitions_num)
+        );
     }
 
     let step = window / partitions_num;
@@ -11,7 +14,6 @@ pub fn get_partitions(window: usize, series_len: usize, partitions_num: usize) -
     }
     return partitions;
 }
-
 
 #[cfg(test)]
 mod tests {

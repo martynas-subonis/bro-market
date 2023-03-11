@@ -1,4 +1,4 @@
-use crate::util::match_series::{match_series, exceeds_allowed_rel_diff};
+use crate::util::match_series::{exceeds_allowed_rel_diff, match_series};
 
 const HEAD_AND_SHOULDERS_PARTITIONS: usize = 6;
 
@@ -17,7 +17,6 @@ fn slopes_match(slopes: Vec<f64>) -> bool {
     if k1 < 0.0 || k2 > 0.0 || k3 < 0.0 || k4 > 0.0 || k5 < 0.0 || k6 > 0.0 {
         return false;
     }
-
 
     // First shoulder check
     if exceeds_allowed_rel_diff(k1, k2) {
@@ -86,7 +85,7 @@ mod tests {
             vec![1.0, -1.0, 1.0, -1.0, 1.0, 1.0],
             vec![-1.0, -1.0, 1.0, -1.0, 1.0, -1.0],
             vec![1.0, -1.0, -1.0, -1.0, 1.0, -1.0],
-            vec![1.0, -1.0, 1.0, -1.0, -1.0, -1.0]
+            vec![1.0, -1.0, 1.0, -1.0, -1.0, -1.0],
         ];
 
         for slopes in incorrect_slopes {

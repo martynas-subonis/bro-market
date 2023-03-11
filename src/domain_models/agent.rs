@@ -1,5 +1,5 @@
-use std::collections::{HashMap, HashSet};
 use crate::domain_models::stock::Stock;
+use std::collections::{HashMap, HashSet};
 
 const TRADE_FRACTION: f64 = 0.4;
 const TRADING_FEE: f64 = 0.005;
@@ -18,7 +18,6 @@ pub struct Trade {
     pub units: f64,
     pub time: usize,
 }
-
 
 #[derive(Debug)]
 pub struct Agent<'a> {
@@ -65,7 +64,7 @@ impl Agent<'_> {
             self.cash += sell_amount - fee_amount;
             self.trades.push(Trade {
                 id: stock_id,
-                units: - *sell_units,
+                units: -*sell_units,
                 time,
             });
             self.portfolio.remove(&stock_id_clone);
@@ -91,8 +90,8 @@ impl Agent<'_> {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::hash_map::Entry;
     use super::*;
+    use std::collections::hash_map::Entry;
 
     #[test]
     fn buys_first_stock() {
@@ -112,13 +111,12 @@ mod tests {
         agent.buy(&stock, 1);
         assert_eq!(agent.portfolio[&stock.id], 995.0);
         assert_eq!(agent.cash, 3000.0);
-        assert!(agent.trades.iter().eq(
-            vec![Trade {
-                id: "test".to_string(),
-                units: 995.0,
-                time: 1,
-            }].iter()
-        ));
+        assert!(agent.trades.iter().eq(vec![Trade {
+            id: "test".to_string(),
+            units: 995.0,
+            time: 1,
+        }]
+        .iter()));
     }
 
     #[test]
@@ -206,7 +204,10 @@ mod tests {
         let initial_amount = 100.0;
         let mut agent = Agent {
             name: "test",
-            portfolio: HashMap::from([(stock_one.id.clone(), initial_amount), (stock_two.id.clone(), initial_amount)]),
+            portfolio: HashMap::from([
+                (stock_one.id.clone(), initial_amount),
+                (stock_two.id.clone(), initial_amount),
+            ]),
             cash: initial_cash,
             strategies: HashSet::new(),
             trades: Vec::new(),

@@ -1,5 +1,7 @@
-use crate::domain_models::agent::{Agent};
-use crate::domain_models::agent::Strategies::{HeadAndShoulders, ReverseHeadAndShoulders, DoubleBottom, DoubleTop};
+use crate::domain_models::agent::Agent;
+use crate::domain_models::agent::Strategies::{
+    DoubleBottom, DoubleTop, HeadAndShoulders, ReverseHeadAndShoulders,
+};
 use crate::domain_models::stock::Stock;
 use crate::pseudo_strategies::double_bottom::is_double_bottom;
 use crate::pseudo_strategies::double_top::is_double_top;

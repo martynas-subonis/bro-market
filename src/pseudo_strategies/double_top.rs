@@ -1,4 +1,4 @@
-use crate::util::match_series::{match_series, exceeds_allowed_rel_diff};
+use crate::util::match_series::{exceeds_allowed_rel_diff, match_series};
 
 const DOUBLE_TOP_PARTITIONS: usize = 4;
 
@@ -78,10 +78,7 @@ mod tests {
 
     #[test]
     fn slopes_match_returns_false_for_higher_deviations_for_close_pairs() {
-        let high_deviation_slopes = [
-            vec![1.0, -0.7, 1.0, -1.0],
-            vec![1.0, -1.0, 0.6, -1.0],
-        ];
+        let high_deviation_slopes = [vec![1.0, -0.7, 1.0, -1.0], vec![1.0, -1.0, 0.6, -1.0]];
 
         for slopes in high_deviation_slopes {
             let result = slopes_match(slopes);
@@ -91,10 +88,7 @@ mod tests {
 
     #[test]
     fn slopes_match_returns_false_for_higher_deviations_between_tops() {
-        let high_deviation_slopes = [
-            vec![0.7, -0.7, 1.0, -1.0],
-            vec![1.0, -1.0, 0.6, -0.6],
-        ];
+        let high_deviation_slopes = [vec![0.7, -0.7, 1.0, -1.0], vec![1.0, -1.0, 0.6, -0.6]];
 
         for slopes in high_deviation_slopes {
             let result = slopes_match(slopes);

@@ -1,9 +1,13 @@
-use crate::util::match_series::{match_series, exceeds_allowed_rel_diff};
+use crate::util::match_series::{exceeds_allowed_rel_diff, match_series};
 
 const REVERSE_HEAD_AND_SHOULDERS_PARTITIONS: usize = 6;
 
 pub fn is_reverse_head_and_shoulders(price_series: &Vec<f64>) -> bool {
-    return match_series(price_series, REVERSE_HEAD_AND_SHOULDERS_PARTITIONS, slopes_match);
+    return match_series(
+        price_series,
+        REVERSE_HEAD_AND_SHOULDERS_PARTITIONS,
+        slopes_match,
+    );
 }
 
 fn slopes_match(slopes: Vec<f64>) -> bool {
@@ -85,7 +89,7 @@ mod tests {
             vec![-1.0, 1.0, -1.0, 1.0, -1.0, -1.0],
             vec![1.0, 1.0, -1.0, 1.0, -1.0, 1.0],
             vec![-1.0, 1.0, 1.0, 1.0, -1.0, 1.0],
-            vec![-1.0, 1.0, -1.0, 1.0, 1.0, 1.0]
+            vec![-1.0, 1.0, -1.0, 1.0, 1.0, 1.0],
         ];
 
         for slopes in incorrect_slopes {

@@ -6,9 +6,7 @@ const ABS_NOISE: f64 = 0.001;
 const RELATIVE_NOISE: f64 = 0.01;
 
 pub fn get_stock() -> Vec<Stock> {
-    return (0..NUMBER_OF_STOCKS)
-        .map(|_| Stock::default())
-        .collect();
+    return (0..NUMBER_OF_STOCKS).map(|_| Stock::default()).collect();
 }
 
 #[derive(Debug, Clone)]

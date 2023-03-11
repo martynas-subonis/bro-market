@@ -1,6 +1,8 @@
+use crate::domain_models::agent::Agent;
+use crate::domain_models::agent::Strategies::{
+    DoubleBottom, DoubleTop, HeadAndShoulders, ReverseHeadAndShoulders,
+};
 use std::collections::{HashMap, HashSet};
-use crate::domain_models::agent::{Agent};
-use crate::domain_models::agent::Strategies::{HeadAndShoulders, ReverseHeadAndShoulders, DoubleTop, DoubleBottom};
 
 const DEFAULT_STARTING_CASH: f64 = 10000.0;
 pub const CHAD_NAME: &str = "Chad The Crypto King";
