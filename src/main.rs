@@ -10,13 +10,13 @@ use crate::domain_models::stock::get_stock;
 use crate::pseudo_strategies::execute_strategy::execute_strategy;
 use crate::stats::containers::AgentRunStats;
 
-const NUMBER_OF_SIMULATIONS: usize = 20;
+const NUMBER_OF_SIMULATIONS: usize = 100;
 const NUMBER_OF_DAYS: usize = 1000;
 const NUMBER_OF_HOURS: usize = 24 * NUMBER_OF_DAYS;
 
 
 fn main() {
-    let result: Vec<AgentRunStats> = (0..NUMBER_OF_SIMULATIONS)
+    let result: HashMap<&str, Vec<AgentRunStats>> = (0..NUMBER_OF_SIMULATIONS)
         .into_par_iter()
         .map(|_| {
             let mut stocks = get_stock();
@@ -30,18 +30,22 @@ fn main() {
                     }
                 }
             }
-            let stats: Vec<AgentRunStats> = bros
+            let stats: HashMap<&str, Vec<AgentRunStats>> = bros
                 .iter()
-                .map(|bro| AgentRunStats {
+                .map(|bro| (bro.name, Vec::from([AgentRunStats {
                     name: bro.name,
                     trade_count: bro.trades.len(),
                     net_worth: bro.get_net_worth(&stocks),
-                })
+                }])))
                 .collect();
             return stats;
         })
-        .flatten()
-        .collect();
-
+        .reduce(|| HashMap::new(), |mut acc, map| {
+            for (key, mut value) in map.into_iter() {
+                let stats_vec = acc.entry(key).or_insert_with(Vec::new);
+                stats_vec.append(&mut value);
+            }
+            return acc;
+        });
     println!("Stats: {:?}", result);
 }
