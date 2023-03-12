@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 lib = { path = "../lib" }
+serde_json = "1.0.94"
