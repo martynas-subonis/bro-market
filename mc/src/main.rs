@@ -11,7 +11,7 @@ use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
 
-const NUMBER_OF_SIMULATIONS: usize = 3;
+const NUMBER_OF_SIMULATIONS: usize = 100;
 const NUMBER_OF_DAYS: usize = 1000;
 const NUMBER_OF_HOURS: usize = 24 * NUMBER_OF_DAYS;
 
@@ -56,6 +56,5 @@ fn main() {
 
     let serialized = serde_json::to_string(&result).unwrap();
     let mut file = File::create(OUTPUT_FILE_NAME).unwrap();
-    file.write_all(serialized.as_bytes())
-        .expect(format!("Failed to write to file {}", OUTPUT_FILE_NAME).as_str());
+    file.write_all(serialized.as_bytes()).unwrap();
 }
