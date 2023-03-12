@@ -5,18 +5,15 @@ mod util;
 use crate::domain_models::bros::get_bros;
 use crate::domain_models::stock::get_stocks;
 use crate::pseudo_strategies::execute_strategy::execute_strategy;
+use lib::{AgentRunStats, OUTPUT_FILE_NAME};
 use rayon::prelude::*;
 use std::collections::HashMap;
+use std::fs::File;
+use std::io::prelude::*;
 
-const NUMBER_OF_SIMULATIONS: usize = 10;
+const NUMBER_OF_SIMULATIONS: usize = 3;
 const NUMBER_OF_DAYS: usize = 1000;
 const NUMBER_OF_HOURS: usize = 24 * NUMBER_OF_DAYS;
-
-#[derive(Debug)]
-pub struct AgentRunStats {
-    pub trade_count: usize,
-    pub net_worth: f64,
-}
 
 fn main() {
     let result: HashMap<&str, Vec<AgentRunStats>> = (0..NUMBER_OF_SIMULATIONS)
@@ -56,5 +53,9 @@ fn main() {
                 return acc;
             },
         );
-    println!("Stats: {:?}", result);
+
+    let serialized = serde_json::to_string(&result).unwrap();
+    let mut file = File::create(OUTPUT_FILE_NAME).unwrap();
+    file.write_all(serialized.as_bytes())
+        .expect(format!("Failed to write to file {}", OUTPUT_FILE_NAME).as_str());
 }
