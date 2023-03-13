@@ -1,5 +1,6 @@
-pub fn round_up_to_1000(value: u32) -> u32 {
-    ((value + 999) / 1000) * 1000
+pub fn round_to_precision(num: u32, p: u32) -> u32 {
+    let rounded = (num / p) * p;
+    return rounded;
 }
 
 #[cfg(test)]
@@ -7,10 +8,10 @@ mod tests {
     use super::*;
 
     #[test]
-    fn round_up_to_500_rounds_0_correctly() {
-        let cases = [(0, 0), (1, 1000), (999, 1000), (1000, 1000), (1001, 2000)];
+    fn round_to_precision_rounds_correctly_for_500() {
+        let cases = [(0, 0), (1, 0), (999, 500), (1000, 1000), (1001, 1000)];
         for case in cases {
-            assert_eq!(round_up_to_1000(case.0), case.1)
+            assert_eq!(round_to_precision(case.0, 500), case.1)
         }
     }
 }

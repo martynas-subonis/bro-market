@@ -11,7 +11,7 @@ use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
 
-const NUMBER_OF_SIMULATIONS: usize = 100;
+const NUMBER_OF_SIMULATIONS: usize = 2000;
 const NUMBER_OF_DAYS: usize = 1000;
 const NUMBER_OF_HOURS: usize = 24 * NUMBER_OF_DAYS;
 
