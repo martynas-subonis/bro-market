@@ -2,10 +2,8 @@ use crate::domain_models::agent::Agent;
 use crate::domain_models::agent::Strategies::{
     DoubleBottom, DoubleTop, HeadAndShoulders, ReverseHeadAndShoulders,
 };
-use lib::{BEN_NAME, CHAD_NAME};
+use lib::{BEN_NAME, CHAD_NAME, DEFAULT_STARTING_CASH};
 use std::collections::{HashMap, HashSet};
-
-const DEFAULT_STARTING_CASH: f64 = 10000.0;
 
 pub fn get_bros() -> Vec<Agent<'static>> {
     let chad = Agent {

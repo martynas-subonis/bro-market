@@ -1,17 +1,22 @@
 mod math;
 
 use crate::math::round_to_precision;
-use lib::{AgentRunStats, BEN_NAME, CHAD_NAME, OUTPUT_FILE_NAME};
+use lib::{AgentRunStats, BEN_NAME, CHAD_NAME, DEFAULT_STARTING_CASH, OUTPUT_FILE_NAME};
+use ndarray::{Array, Ix1};
 use plotters::prelude::*;
 use serde_json;
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::BufReader;
 
-const OUTPUT_PLOT_FILE_NAME: &str = "generated/stats.png";
+const NETWORTH_PLOT_FILE_NAME: &str = "generated/networth.png";
+const TRADE_COUNT_PLOT_FILE_NAME: &str = "generated/trade_count.png";
 
 pub fn main() {
-    draw_histogram(load_data());
+    let data = load_data();
+    draw_networth_histogram(data.clone());
+    draw_trade_counts_histogram(data.clone());
+    print_stats(data);
 }
 
 fn load_data() -> HashMap<String, Vec<AgentRunStats>> {
@@ -20,13 +25,13 @@ fn load_data() -> HashMap<String, Vec<AgentRunStats>> {
     return serde_json::from_reader(reader).unwrap();
 }
 
-fn draw_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () {
-    let draw_area = BitMapBackend::new(OUTPUT_PLOT_FILE_NAME, (1280, 960)).into_drawing_area();
+fn draw_networth_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () {
+    let draw_area = BitMapBackend::new(NETWORTH_PLOT_FILE_NAME, (1280, 960)).into_drawing_area();
     draw_area.fill(&WHITE).unwrap();
 
     let mut chart = ChartBuilder::on(&draw_area)
-        .x_label_area_size(50)
-        .y_label_area_size(50)
+        .x_label_area_size(60)
+        .y_label_area_size(60)
         .margin(5)
         .caption("Networth Distribution", ("sans-serif", 50.0))
         .build_cartesian_2d((0u32..75000u32).into_segmented(), 0u32..170u32)
@@ -49,20 +54,90 @@ fn draw_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () {
         let key_cl2 = key.clone();
         chart
             .draw_series(
-                Histogram::vertical(&chart).margin(3).style(get_color(key).filled()).data(
-                    value
-                        .iter()
-                        .map(|x| (round_to_precision(x.net_worth as u32, 500), 1)),
-                ),
+                Histogram::vertical(&chart)
+                    .margin(3)
+                    .style(get_color(key).filled())
+                    .data(
+                        value
+                            .iter()
+                            .map(|x| (round_to_precision(x.net_worth as u32, 500), 1)),
+                    ),
             )
             .unwrap()
             .label(key_cl)
             .legend(move |(x, y)| {
-                PathElement::new(vec![(x, y), (x + 20, y)], ShapeStyle {
-                    color: get_color(key_cl2.clone()),
-                    filled: false,
-                    stroke_width: 4,
-                })
+                PathElement::new(
+                    vec![(x, y), (x + 20, y)],
+                    ShapeStyle {
+                        color: get_color(key_cl2.clone()),
+                        filled: false,
+                        stroke_width: 4,
+                    },
+                )
+            });
+    }
+
+    chart
+        .configure_series_labels()
+        .border_style(&BLACK)
+        .legend_area_size(30)
+        .background_style(&WHITE.mix(0.8))
+        .label_font(("sans-serif", 20))
+        .draw()
+        .unwrap();
+
+    draw_area.present().unwrap();
+}
+
+fn draw_trade_counts_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () {
+    let draw_area = BitMapBackend::new(TRADE_COUNT_PLOT_FILE_NAME, (1280, 960)).into_drawing_area();
+    draw_area.fill(&WHITE).unwrap();
+
+    let mut chart = ChartBuilder::on(&draw_area)
+        .x_label_area_size(60)
+        .y_label_area_size(60)
+        .margin(5)
+        .caption("Trade Counts Distribution", ("sans-serif", 50.0))
+        .build_cartesian_2d(0u32..330u32, 0u32..1100u32)
+        .unwrap();
+
+    chart
+        .configure_mesh()
+        .disable_x_mesh()
+        .bold_line_style(&BLACK.mix(0.3))
+        .y_desc("Count")
+        .y_label_style(("sans-serif", 20))
+        .x_desc("Trade Counts")
+        .x_label_style(("sans-serif", 20))
+        .axis_desc_style(("sans-serif", 30))
+        .draw()
+        .unwrap();
+
+    for (key, value) in data {
+        let key_cl = key.clone();
+        let key_cl2 = key.clone();
+        chart
+            .draw_series(
+                Histogram::vertical(&chart)
+                    .margin(7)
+                    .style(get_color(key).filled())
+                    .data(
+                        value
+                            .iter()
+                            .map(|x| (round_to_precision(x.trade_count as u32, 5), 1)),
+                    ),
+            )
+            .unwrap()
+            .label(key_cl)
+            .legend(move |(x, y)| {
+                PathElement::new(
+                    vec![(x, y), (x + 20, y)],
+                    ShapeStyle {
+                        color: get_color(key_cl2.clone()),
+                        filled: false,
+                        stroke_width: 4,
+                    },
+                )
             });
     }
 
@@ -85,4 +160,38 @@ fn get_color(key: String) -> RGBAColor {
         return GREEN.mix(0.3);
     }
     panic!("Unknown color.")
+}
+
+fn print_stats(data: HashMap<String, Vec<AgentRunStats>>) {
+    for (agent, run_stats) in data.iter() {
+        let (trade_count_array, net_worth_array) = vec_to_arrays(run_stats);
+
+        let (net_mean, net_std) = calc_stats(&net_worth_array);
+        let (trade_count_mean, trade_count_std) = calc_stats(&trade_count_array);
+        let delta = (net_mean - DEFAULT_STARTING_CASH)/ DEFAULT_STARTING_CASH * 100.0;
+
+        println!(
+            "{} statistics:\n\
+            Net Worth: {:.2} ± {:.2}\n\
+            Trade Count: {:.2} ± {:.2}\n\
+            % delta: {:.2}\n",
+            agent, net_mean, net_std, trade_count_mean, trade_count_std, delta
+        );
+    }
+}
+
+fn vec_to_arrays(run_stats: &Vec<AgentRunStats>) -> (Array<f64, Ix1>, Array<f64, Ix1>) {
+    let trade_counts: Vec<f64> = run_stats.iter().map(|x| x.trade_count as f64).collect();
+    let net_worths: Vec<f64> = run_stats.iter().map(|x| x.net_worth).collect();
+
+    let trade_count_array = Array::from(trade_counts);
+    let net_worth_array = Array::from(net_worths);
+
+    (trade_count_array, net_worth_array)
+}
+
+fn calc_stats(array: &Array<f64, Ix1>) -> (f64, f64) {
+    let mean = array.mean().unwrap();
+    let std = array.std(0.0);
+    (mean, std)
 }
