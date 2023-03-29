@@ -32,9 +32,9 @@ fn draw_networth_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () {
     let mut chart = ChartBuilder::on(&draw_area)
         .x_label_area_size(60)
         .y_label_area_size(60)
-        .margin(5)
+        .margin(20)
         .caption("Networth Distribution", ("sans-serif", 50.0))
-        .build_cartesian_2d((0u32..75000u32).into_segmented(), 0u32..170u32)
+        .build_cartesian_2d(0u32..40000u32, 0u32..800u32)
         .unwrap();
 
     chart
@@ -55,12 +55,12 @@ fn draw_networth_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () {
         chart
             .draw_series(
                 Histogram::vertical(&chart)
-                    .margin(3)
+                    .margin(12)
                     .style(get_color(key).filled())
                     .data(
                         value
                             .iter()
-                            .map(|x| (round_to_precision(x.net_worth as u32, 500), 1)),
+                            .map(|x| (round_to_precision(x.net_worth as u32, 1000), 1)),
                     ),
             )
             .unwrap()
@@ -96,9 +96,9 @@ fn draw_trade_counts_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () 
     let mut chart = ChartBuilder::on(&draw_area)
         .x_label_area_size(60)
         .y_label_area_size(60)
-        .margin(5)
+        .margin(20)
         .caption("Trade Counts Distribution", ("sans-serif", 50.0))
-        .build_cartesian_2d(0u32..330u32, 0u32..1100u32)
+        .build_cartesian_2d(0u32..250u32, 0u32..700u32)
         .unwrap();
 
     chart
@@ -119,12 +119,12 @@ fn draw_trade_counts_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () 
         chart
             .draw_series(
                 Histogram::vertical(&chart)
-                    .margin(7)
+                    .margin(5)
                     .style(get_color(key).filled())
                     .data(
                         value
                             .iter()
-                            .map(|x| (round_to_precision(x.trade_count as u32, 5), 1)),
+                            .map(|x| (x.trade_count as u32, 1)),
                     ),
             )
             .unwrap()
