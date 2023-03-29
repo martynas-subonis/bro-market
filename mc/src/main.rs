@@ -13,7 +13,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::time::Instant;
 
-const NUMBER_OF_SIMULATIONS: usize = 10;
+const NUMBER_OF_SIMULATIONS: usize = 5000;
 
 fn main() {
     println!("Running bro market simulation...");
