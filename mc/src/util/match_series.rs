@@ -1,5 +1,6 @@
 use crate::util::partitions::get_partitions;
 use crate::util::windows::get_available_windows;
+use lib::NUMBER_OF_HOURS;
 use linreg::linear_regression;
 
 const ALLOWED_RELATIVE_DIFF: f64 = 0.3;
@@ -7,6 +8,7 @@ const ALLOWED_RELATIVE_DIFF: f64 = 0.3;
 pub fn match_series(
     price_series: &Vec<f64>,
     partitions_nums: usize,
+    timeline: &[f64; NUMBER_OF_HOURS],
     matcher: fn(Vec<f64>) -> bool,
 ) -> bool {
     let n = price_series.len();
@@ -15,21 +17,24 @@ pub fn match_series(
         return false;
     }
 
-    let hours: Vec<f64> = (0..n).map(|x| x as f64).collect();
     for window in available_windows {
         let partitions = get_partitions(window, price_series.len(), partitions_nums);
-        if matcher(get_partition_slopes(&price_series, &hours, partitions)) {
+        if matcher(get_partition_slopes(&price_series, timeline, partitions)) {
             return true;
         }
     }
     return false;
 }
 
-fn get_partition_slopes(price_series: &Vec<f64>, hours: &Vec<f64>, p: Vec<usize>) -> Vec<f64> {
+fn get_partition_slopes(
+    price_series: &Vec<f64>,
+    timeline: &[f64; NUMBER_OF_HOURS],
+    p: Vec<usize>,
+) -> Vec<f64> {
     let mut slopes: Vec<f64> = Vec::new();
     for i in 0..p.len() - 1 {
         let fit: (f64, f64) =
-            match linear_regression(&hours[p[i]..p[i + 1]], &price_series[p[i]..p[i + 1]]) {
+            match linear_regression(&timeline[p[i]..p[i + 1]], &price_series[p[i]..p[i + 1]]) {
                 Ok(num) => num,
                 Err(e) => {
                     panic!(

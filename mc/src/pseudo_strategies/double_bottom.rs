@@ -1,9 +1,15 @@
 use crate::util::match_series::{exceeds_allowed_rel_diff, match_series};
+use lib::NUMBER_OF_HOURS;
 
 const DOUBLE_BOTTOM_PARTITIONS: usize = 4;
 
-pub fn is_double_bottom(price_series: &Vec<f64>) -> bool {
-    return match_series(price_series, DOUBLE_BOTTOM_PARTITIONS, slopes_match);
+pub fn is_double_bottom(price_series: &Vec<f64>, timeline: &[f64; NUMBER_OF_HOURS]) -> bool {
+    return match_series(
+        price_series,
+        DOUBLE_BOTTOM_PARTITIONS,
+        timeline,
+        slopes_match,
+    );
 }
 
 fn slopes_match(slopes: Vec<f64>) -> bool {

@@ -1,11 +1,16 @@
 use crate::util::match_series::{exceeds_allowed_rel_diff, match_series};
+use lib::NUMBER_OF_HOURS;
 
 const REVERSE_HEAD_AND_SHOULDERS_PARTITIONS: usize = 6;
 
-pub fn is_reverse_head_and_shoulders(price_series: &Vec<f64>) -> bool {
+pub fn is_reverse_head_and_shoulders(
+    price_series: &Vec<f64>,
+    timeline: &[f64; NUMBER_OF_HOURS],
+) -> bool {
     return match_series(
         price_series,
         REVERSE_HEAD_AND_SHOULDERS_PARTITIONS,
+        timeline,
         slopes_match,
     );
 }

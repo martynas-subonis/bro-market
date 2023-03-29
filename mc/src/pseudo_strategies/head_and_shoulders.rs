@@ -1,9 +1,15 @@
 use crate::util::match_series::{exceeds_allowed_rel_diff, match_series};
+use lib::NUMBER_OF_HOURS;
 
 const HEAD_AND_SHOULDERS_PARTITIONS: usize = 6;
 
-pub fn is_head_and_shoulders(price_series: &Vec<f64>) -> bool {
-    return match_series(price_series, HEAD_AND_SHOULDERS_PARTITIONS, slopes_match);
+pub fn is_head_and_shoulders(price_series: &Vec<f64>, timeline: &[f64; NUMBER_OF_HOURS]) -> bool {
+    return match_series(
+        price_series,
+        HEAD_AND_SHOULDERS_PARTITIONS,
+        timeline,
+        slopes_match,
+    );
 }
 
 fn slopes_match(slopes: Vec<f64>) -> bool {

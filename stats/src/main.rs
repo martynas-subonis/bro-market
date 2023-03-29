@@ -168,7 +168,7 @@ fn print_stats(data: HashMap<String, Vec<AgentRunStats>>) {
 
         let (net_mean, net_std) = calc_stats(&net_worth_array);
         let (trade_count_mean, trade_count_std) = calc_stats(&trade_count_array);
-        let delta = (net_mean - DEFAULT_STARTING_CASH)/ DEFAULT_STARTING_CASH * 100.0;
+        let delta = (net_mean - DEFAULT_STARTING_CASH) / DEFAULT_STARTING_CASH * 100.0;
 
         println!(
             "{} statistics:\n\

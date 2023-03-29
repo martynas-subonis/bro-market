@@ -91,7 +91,6 @@ impl Agent<'_> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::collections::hash_map::Entry;
 
     #[test]
     fn buys_first_stock() {
@@ -135,7 +134,6 @@ mod tests {
             strategies: HashSet::new(),
             trades: Vec::new(),
         };
-        let time = 1 as usize;
         agent.buy(&stock, 1);
         assert_eq!(agent.portfolio[&stock.id], 1995.0);
         assert_eq!(agent.cash, 3000.0);
@@ -202,7 +200,7 @@ mod tests {
         let stocks = Vec::from([stock_one.clone(), stock_two.clone()]);
         let initial_cash = 1000.0;
         let initial_amount = 100.0;
-        let mut agent = Agent {
+        let agent = Agent {
             name: "test",
             portfolio: HashMap::from([
                 (stock_one.id.clone(), initial_amount),
