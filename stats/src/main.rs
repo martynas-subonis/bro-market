@@ -1,6 +1,6 @@
 mod math;
 
-use crate::math::round_to_precision;
+use crate::math::{calc_stats, calculate_networth_probability, round_to_precision};
 use lib::{AgentRunStats, BEN_NAME, CHAD_NAME, DEFAULT_STARTING_CASH, OUTPUT_FILE_NAME};
 use ndarray::{Array, Ix1};
 use plotters::prelude::*;
@@ -140,9 +140,9 @@ fn stdout_stats(data: &HashMap<String, Vec<AgentRunStats>>) {
     let mut trade_count_mean_row = row!["Trade count avg"];
     let mut avg_profit_row = row!["Avg. profit"];
     let mut random_profit_prob_row = row!["Profit p"];
-    let mut random_2x_prob_row = row!["2x p"];
-    let mut random_3x_prob_row = row!["3x p"];
-    let mut random_5x_prob_row = row!["5x p"];
+    let mut random_2x_prob_row = row![">2x p"];
+    let mut random_3x_prob_row = row![">3x p"];
+    let mut random_5x_prob_row = row![">5x p"];
 
     for run_stats in data.values() {
         let (trade_count_array, net_worth_array) = vec_to_arrays(run_stats);
@@ -160,19 +160,19 @@ fn stdout_stats(data: &HashMap<String, Vec<AgentRunStats>>) {
         )));
         random_profit_prob_row.add_cell(Cell::new(&format!(
             "{:.2}%",
-            calculate_probability(&net_worth_array, 1.0)
+            calculate_networth_probability(&net_worth_array, 1.0)
         )));
         random_2x_prob_row.add_cell(Cell::new(&format!(
             "{:.2}%",
-            calculate_probability(&net_worth_array, 2.0)
+            calculate_networth_probability(&net_worth_array, 2.0)
         )));
         random_3x_prob_row.add_cell(Cell::new(&format!(
             "{:.2}%",
-            calculate_probability(&net_worth_array, 3.0)
+            calculate_networth_probability(&net_worth_array, 3.0)
         )));
         random_5x_prob_row.add_cell(Cell::new(&format!(
             "{:.2}%",
-            calculate_probability(&net_worth_array, 5.0)
+            calculate_networth_probability(&net_worth_array, 5.0)
         )));
     }
     table.add_row(net_mean_row);
@@ -193,19 +193,4 @@ fn vec_to_arrays(run_stats: &Vec<AgentRunStats>) -> (Array<f64, Ix1>, Array<f64,
     let net_worth_array = Array::from(net_worths);
 
     (trade_count_array, net_worth_array)
-}
-
-fn calc_stats(array: &Array<f64, Ix1>) -> (f64, f64) {
-    let mean = array.mean().unwrap();
-    let std = array.std(0.0);
-    (mean, std)
-}
-
-fn calculate_probability(net_worth_array: &Array<f64, Ix1>, multiplier: f64) -> f64 {
-    net_worth_array
-        .iter()
-        .filter(|&x| *x > multiplier * DEFAULT_STARTING_CASH)
-        .count() as f64
-        / net_worth_array.len() as f64
-        * 100.0
 }
