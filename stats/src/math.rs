@@ -2,7 +2,6 @@ use lib::DEFAULT_STARTING_CASH;
 use ndarray::{Array, Ix1};
 
 pub fn round_to_precision(num: u32, p: u32) -> u32 {
-    
     (num / p) * p
 }
 

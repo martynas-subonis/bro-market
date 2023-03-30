@@ -1,6 +1,6 @@
 use crate::domain_models::stock::Stock;
-use std::collections::{HashMap, HashSet};
 use std::collections::hash_map::Entry::Vacant;
+use std::collections::{HashMap, HashSet};
 
 const TRADE_FRACTION: f64 = 0.4;
 const TRADING_FEE: f64 = 0.005;
@@ -70,12 +70,10 @@ impl Agent<'_> {
         }
     }
 
-    pub fn get_net_worth(&self, stocks: &Vec<Stock>) -> f64 {
+    pub fn get_net_worth(&self, stocks: &[Stock]) -> f64 {
         let mut net_worth = self.cash;
-        let stock_price_map: HashMap<String, f64> = stocks
-            .iter()
-            .map(|s| (s.id.clone(), s.price))
-            .collect();
+        let stock_price_map: HashMap<String, f64> =
+            stocks.iter().map(|s| (s.id.clone(), s.price)).collect();
 
         for k in self.portfolio.keys() {
             let amount = self.portfolio.get(k).unwrap();
@@ -114,7 +112,7 @@ mod tests {
             units: 995.0,
             time: 1,
         }]
-            .iter()));
+        .iter()));
     }
 
     #[test]

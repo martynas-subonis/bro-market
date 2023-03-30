@@ -50,7 +50,7 @@ mod tests {
 
         let result = slopes_match(slopes);
 
-        assert_eq!(result, true);
+        assert!(result)
     }
 
     #[test]
@@ -59,7 +59,7 @@ mod tests {
 
         let result = slopes_match(slopes);
 
-        assert_eq!(result, true);
+        assert!(result)
     }
 
     #[test]
@@ -73,7 +73,7 @@ mod tests {
 
         for slopes in incorrect_slopes {
             let result = slopes_match(slopes);
-            assert_eq!(result, false);
+            assert!(!result)
         }
     }
 
@@ -83,7 +83,7 @@ mod tests {
 
         for slopes in high_deviation_slopes {
             let result = slopes_match(slopes);
-            assert_eq!(result, false);
+            assert!(!result)
         }
     }
 
@@ -93,7 +93,7 @@ mod tests {
 
         for slopes in high_deviation_slopes {
             let result = slopes_match(slopes);
-            assert_eq!(result, false);
+            assert!(!result)
         }
     }
 }

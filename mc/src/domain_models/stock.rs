@@ -25,7 +25,7 @@ impl Default for Stock {
 }
 
 impl Stock {
-    pub(crate) fn mv(&mut self, sp: &mut StochasticProcess)  {
+    pub(crate) fn mv(&mut self, sp: &mut StochasticProcess) {
         let s = sp.sample();
         let delta = self.price * s.rel + s.abs;
         self.price += delta;

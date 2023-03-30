@@ -27,7 +27,7 @@ pub fn match_series(
 }
 
 fn get_partition_slopes(
-    price_series: &Vec<f64>,
+    price_series: &[f64],
     timeline: &[f64; NUMBER_OF_HOURS],
     p: Vec<usize>,
 ) -> Vec<f64> {

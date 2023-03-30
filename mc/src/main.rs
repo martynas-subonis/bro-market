@@ -25,8 +25,8 @@ fn main() {
 
 fn create_timeline() -> [f64; NUMBER_OF_HOURS] {
     let mut hours_array = [0.0; NUMBER_OF_HOURS];
-    for i in 0..NUMBER_OF_HOURS {
-        hours_array[i] = i as f64;
+    for (i, hour) in hours_array.iter_mut().enumerate() {
+        *hour = i as f64;
     }
     hours_array
 }
@@ -38,16 +38,13 @@ fn run_simulations(
     (0..num_simulations)
         .into_par_iter()
         .map(|id| simulate_single_run(id, timeline))
-        .reduce(
-            HashMap::new,
-            |mut acc, map| {
-                for (key, mut value) in map.into_iter() {
-                    let stats_vec = acc.entry(key).or_insert_with(Vec::new);
-                    stats_vec.append(&mut value);
-                }
-                acc
-            },
-        )
+        .reduce(HashMap::new, |mut acc, map| {
+            for (key, mut value) in map.into_iter() {
+                let stats_vec = acc.entry(key).or_insert_with(Vec::new);
+                stats_vec.append(&mut value);
+            }
+            acc
+        })
 }
 
 fn simulate_single_run(

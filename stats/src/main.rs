@@ -185,7 +185,7 @@ fn stdout_stats(data: &HashMap<String, Vec<AgentRunStats>>) {
     table.printstd();
 }
 
-fn vec_to_arrays(run_stats: &Vec<AgentRunStats>) -> (Array<f64, Ix1>, Array<f64, Ix1>) {
+fn vec_to_arrays(run_stats: &[AgentRunStats]) -> (Array<f64, Ix1>, Array<f64, Ix1>) {
     let trade_counts: Vec<f64> = run_stats.iter().map(|x| x.trade_count as f64).collect();
     let net_worths: Vec<f64> = run_stats.iter().map(|x| x.net_worth).collect();
 
