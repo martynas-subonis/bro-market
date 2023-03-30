@@ -17,10 +17,18 @@ const NUMBER_OF_SIMULATIONS: usize = 5000;
 
 fn main() {
     println!("Running bro market simulation...");
-    let timeline = lib::create_timeline();
+    let timeline = create_timeline();
     let result = run_simulations(NUMBER_OF_SIMULATIONS, &timeline);
     save_results(&result, OUTPUT_FILE_NAME);
     println!("Results saved to: {}", OUTPUT_FILE_NAME);
+}
+
+fn create_timeline() -> [f64; NUMBER_OF_HOURS] {
+    let mut hours_array = [0.0; NUMBER_OF_HOURS];
+    for i in 0..NUMBER_OF_HOURS {
+        hours_array[i] = i as f64;
+    }
+    return hours_array;
 }
 
 fn run_simulations(
