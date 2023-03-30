@@ -14,9 +14,9 @@ const TRADE_COUNT_PLOT_FILE_NAME: &str = "generated/trade_count.png";
 
 pub fn main() {
     let data = load_data();
-    draw_networth_histogram(data.clone());
-    draw_trade_counts_histogram(data.clone());
-    print_stats(data);
+    draw_networth_histogram(&data);
+    draw_trade_counts_histogram(&data);
+    stdout_stats(&data);
 }
 
 fn load_data() -> HashMap<String, Vec<AgentRunStats>> {
@@ -25,7 +25,7 @@ fn load_data() -> HashMap<String, Vec<AgentRunStats>> {
     return serde_json::from_reader(reader).unwrap();
 }
 
-fn draw_networth_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () {
+fn draw_networth_histogram(data: &HashMap<String, Vec<AgentRunStats>>) -> () {
     let draw_area = BitMapBackend::new(NETWORTH_PLOT_FILE_NAME, (1280, 960)).into_drawing_area();
     draw_area.fill(&WHITE).unwrap();
 
@@ -50,8 +50,6 @@ fn draw_networth_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () {
         .unwrap();
 
     for (key, value) in data {
-        let key_cl = key.clone();
-        let key_cl2 = key.clone();
         chart
             .draw_series(
                 Histogram::vertical(&chart)
@@ -64,12 +62,12 @@ fn draw_networth_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () {
                     ),
             )
             .unwrap()
-            .label(key_cl)
+            .label(key)
             .legend(move |(x, y)| {
                 PathElement::new(
                     vec![(x, y), (x + 20, y)],
                     ShapeStyle {
-                        color: get_color(key_cl2.clone()),
+                        color: get_color(key),
                         filled: false,
                         stroke_width: 4,
                     },
@@ -89,7 +87,7 @@ fn draw_networth_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () {
     draw_area.present().unwrap();
 }
 
-fn draw_trade_counts_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () {
+fn draw_trade_counts_histogram(data: &HashMap<String, Vec<AgentRunStats>>) -> () {
     let draw_area = BitMapBackend::new(TRADE_COUNT_PLOT_FILE_NAME, (1280, 960)).into_drawing_area();
     draw_area.fill(&WHITE).unwrap();
 
@@ -114,26 +112,20 @@ fn draw_trade_counts_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () 
         .unwrap();
 
     for (key, value) in data {
-        let key_cl = key.clone();
-        let key_cl2 = key.clone();
         chart
             .draw_series(
                 Histogram::vertical(&chart)
                     .margin(5)
                     .style(get_color(key).filled())
-                    .data(
-                        value
-                            .iter()
-                            .map(|x| (x.trade_count as u32, 1)),
-                    ),
+                    .data(value.iter().map(|x| (x.trade_count as u32, 1))),
             )
             .unwrap()
-            .label(key_cl)
+            .label(key)
             .legend(move |(x, y)| {
                 PathElement::new(
                     vec![(x, y), (x + 20, y)],
                     ShapeStyle {
-                        color: get_color(key_cl2.clone()),
+                        color: get_color(key),
                         filled: false,
                         stroke_width: 4,
                     },
@@ -153,16 +145,16 @@ fn draw_trade_counts_histogram(data: HashMap<String, Vec<AgentRunStats>>) -> () 
     draw_area.present().unwrap();
 }
 
-fn get_color(key: String) -> RGBAColor {
-    if CHAD_NAME.to_string().eq(&key) {
+fn get_color(key: &String) -> RGBAColor {
+    if CHAD_NAME.to_string().eq(key) {
         return RED.mix(0.3);
-    } else if BEN_NAME.to_string().eq(&key) {
+    } else if BEN_NAME.to_string().eq(key) {
         return GREEN.mix(0.3);
     }
     panic!("Unknown color.")
 }
 
-fn print_stats(data: HashMap<String, Vec<AgentRunStats>>) {
+fn stdout_stats(data: &HashMap<String, Vec<AgentRunStats>>) {
     for (agent, run_stats) in data.iter() {
         let (trade_count_array, net_worth_array) = vec_to_arrays(run_stats);
 
