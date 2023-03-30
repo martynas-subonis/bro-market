@@ -5,10 +5,10 @@ const MEDIUM_WINDOW: usize = SMALL_WINDOW * SCALE_FACTOR;
 const LARGE_WINDOW: usize = MEDIUM_WINDOW * SCALE_FACTOR;
 
 pub fn get_available_windows(n: usize) -> Vec<usize> {
-    return vec![LARGE_WINDOW, MEDIUM_WINDOW, SMALL_WINDOW]
+    vec![LARGE_WINDOW, MEDIUM_WINDOW, SMALL_WINDOW]
         .into_iter()
         .filter(|x| x <= &n)
-        .collect();
+        .collect()
 }
 
 #[cfg(test)]

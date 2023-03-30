@@ -20,5 +20,5 @@ pub fn get_bros() -> Vec<Agent<'static>> {
         strategies: HashSet::from([DoubleTop, DoubleBottom]),
         trades: Vec::new(),
     };
-    return Vec::from([chad, ben]);
+    Vec::from([chad, ben])
 }

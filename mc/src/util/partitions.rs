@@ -12,7 +12,7 @@ pub fn get_partitions(window: usize, series_len: usize, partitions_num: usize) -
     for part in (0..=partitions_num).rev() {
         partitions.push(series_len - part * step);
     }
-    return partitions;
+    partitions
 }
 
 #[cfg(test)]

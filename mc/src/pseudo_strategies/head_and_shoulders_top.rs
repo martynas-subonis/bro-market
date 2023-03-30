@@ -7,12 +7,12 @@ pub fn is_head_and_shoulders_top(
     price_series: &Vec<f64>,
     timeline: &[f64; NUMBER_OF_HOURS],
 ) -> bool {
-    return match_series(
+    match_series(
         price_series,
         HEAD_AND_SHOULDERS_TOP_PARTITIONS,
         timeline,
         slopes_match,
-    );
+    )
 }
 
 fn slopes_match(slopes: Vec<f64>) -> bool {
@@ -52,7 +52,7 @@ fn slopes_match(slopes: Vec<f64>) -> bool {
         return false;
     }
 
-    return true;
+    true
 }
 
 #[cfg(test)]

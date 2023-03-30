@@ -41,10 +41,8 @@ impl Agent<'_> {
 
         if let Vacant(e) = self.portfolio.entry(stock_id) {
             e.insert(buy_units);
-        } else {
-            if let Some(val) = self.portfolio.get_mut(&stock_id_cl) {
-                *val = *val + buy_units;
-            }
+        } else if let Some(val) = self.portfolio.get_mut(&stock_id_cl) {
+            *val += buy_units;
         }
 
         self.trades.push(Trade {
@@ -75,7 +73,7 @@ impl Agent<'_> {
     pub fn get_net_worth(&self, stocks: &Vec<Stock>) -> f64 {
         let mut net_worth = self.cash;
         let stock_price_map: HashMap<String, f64> = stocks
-            .into_iter()
+            .iter()
             .map(|s| (s.id.clone(), s.price))
             .collect();
 
@@ -85,7 +83,7 @@ impl Agent<'_> {
             net_worth += amount * price;
         }
 
-        return net_worth;
+        net_worth
     }
 }
 
@@ -204,8 +202,8 @@ mod tests {
         let agent = Agent {
             name: "test",
             portfolio: HashMap::from([
-                (stock_one.id.clone(), initial_amount),
-                (stock_two.id.clone(), initial_amount),
+                (stock_one.id, initial_amount),
+                (stock_two.id, initial_amount),
             ]),
             cash: initial_cash,
             strategies: HashSet::new(),

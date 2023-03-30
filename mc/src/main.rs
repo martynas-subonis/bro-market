@@ -28,7 +28,7 @@ fn create_timeline() -> [f64; NUMBER_OF_HOURS] {
     for i in 0..NUMBER_OF_HOURS {
         hours_array[i] = i as f64;
     }
-    return hours_array;
+    hours_array
 }
 
 fn run_simulations(
@@ -39,7 +39,7 @@ fn run_simulations(
         .into_par_iter()
         .map(|id| simulate_single_run(id, timeline))
         .reduce(
-            || HashMap::new(),
+            HashMap::new,
             |mut acc, map| {
                 for (key, mut value) in map.into_iter() {
                     let stats_vec = acc.entry(key).or_insert_with(Vec::new);
@@ -83,7 +83,7 @@ fn simulate_single_run(
 
     let duration = start.elapsed();
     println!("Simulation ID-{} completed in {:?}.", s_id, duration);
-    return result;
+    result
 }
 
 fn save_results(result: &HashMap<&str, Vec<AgentRunStats>>, file_name: &str) {

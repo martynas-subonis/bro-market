@@ -13,17 +13,17 @@ pub fn match_series(
 ) -> bool {
     let n = price_series.len();
     let available_windows = get_available_windows(n);
-    if available_windows.len() == 0 {
+    if available_windows.is_empty() {
         return false;
     }
 
     for window in available_windows {
         let partitions = get_partitions(window, price_series.len(), partitions_nums);
-        if matcher(get_partition_slopes(&price_series, timeline, partitions)) {
+        if matcher(get_partition_slopes(price_series, timeline, partitions)) {
             return true;
         }
     }
-    return false;
+    false
 }
 
 fn get_partition_slopes(
@@ -45,9 +45,9 @@ fn get_partition_slopes(
             };
         slopes.push(fit.0);
     }
-    return slopes;
+    slopes
 }
 
 pub fn exceeds_allowed_rel_diff(k0: f64, k1: f64) -> bool {
-    return ((k0.abs() - k1.abs()).abs() / k0.abs()) > ALLOWED_RELATIVE_DIFF;
+    ((k0.abs() - k1.abs()).abs() / k0.abs()) > ALLOWED_RELATIVE_DIFF
 }

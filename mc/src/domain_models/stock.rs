@@ -4,7 +4,7 @@ use uuid::Uuid;
 const NUMBER_OF_STOCKS: usize = 5;
 
 pub fn get_stocks() -> Vec<Stock> {
-    return (0..NUMBER_OF_STOCKS).map(|_| Stock::default()).collect();
+    (0..NUMBER_OF_STOCKS).map(|_| Stock::default()).collect()
 }
 
 #[derive(Debug, Clone)]
