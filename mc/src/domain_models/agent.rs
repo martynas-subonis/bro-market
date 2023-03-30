@@ -1,5 +1,6 @@
 use crate::domain_models::stock::Stock;
 use std::collections::{HashMap, HashSet};
+use std::collections::hash_map::Entry::Vacant;
 
 const TRADE_FRACTION: f64 = 0.4;
 const TRADING_FEE: f64 = 0.005;
@@ -29,7 +30,7 @@ pub struct Agent<'a> {
 }
 
 impl Agent<'_> {
-    pub fn buy(&mut self, stock: &Stock, time: usize)  {
+    pub fn buy(&mut self, stock: &Stock, time: usize) {
         let trade_amount = TRADE_FRACTION * self.cash;
         let fee_amount = TRADING_FEE * trade_amount;
         self.cash -= trade_amount;
@@ -38,12 +39,12 @@ impl Agent<'_> {
         let stock_id = stock.id.clone();
         let stock_id_cl = stock_id.clone();
 
-        if self.portfolio.contains_key(&stock_id) {
-            if let Some(val) = self.portfolio.get_mut(&stock_id) {
+        if let Vacant(e) = self.portfolio.entry(stock_id) {
+            e.insert(buy_units);
+        } else {
+            if let Some(val) = self.portfolio.get_mut(&stock_id_cl) {
                 *val = *val + buy_units;
             }
-        } else {
-            self.portfolio.insert(stock_id, buy_units);
         }
 
         self.trades.push(Trade {
@@ -53,7 +54,7 @@ impl Agent<'_> {
         });
     }
 
-    pub fn sell(&mut self, stock: &Stock, time: usize)  {
+    pub fn sell(&mut self, stock: &Stock, time: usize) {
         let stock_id = stock.id.clone();
         let stock_id_clone = stock_id.clone();
 
@@ -115,7 +116,7 @@ mod tests {
             units: 995.0,
             time: 1,
         }]
-        .iter()));
+            .iter()));
     }
 
     #[test]

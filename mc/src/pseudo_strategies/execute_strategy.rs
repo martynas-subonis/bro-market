@@ -14,25 +14,17 @@ pub fn execute_strategy(
     agent: &mut Agent,
     h: usize,
     timeline: &[f64; NUMBER_OF_HOURS],
-)  {
-    if agent.strategies.contains(&HeadAndShouldersTop) {
-        if is_head_and_shoulders_top(&stock.history, timeline) {
-            agent.sell(stock, h);
-        }
+) {
+    if agent.strategies.contains(&HeadAndShouldersTop) && is_head_and_shoulders_top(&stock.history, timeline) {
+        agent.sell(stock, h);
     }
-    if agent.strategies.contains(&HeadAndShouldersBottom) {
-        if is_head_and_shoulders_bottom(&stock.history, timeline) {
-            agent.buy(stock, h);
-        }
+    if agent.strategies.contains(&HeadAndShouldersBottom) && is_head_and_shoulders_bottom(&stock.history, timeline) {
+        agent.buy(stock, h);
     }
-    if agent.strategies.contains(&DoubleTop) {
-        if is_double_top(&stock.history, timeline) {
-            agent.sell(stock, h);
-        }
+    if agent.strategies.contains(&DoubleTop) && is_double_top(&stock.history, timeline) {
+        agent.sell(stock, h);
     }
-    if agent.strategies.contains(&DoubleBottom) {
-        if is_double_bottom(&stock.history, timeline) {
-            agent.buy(stock, h);
-        }
+    if agent.strategies.contains(&DoubleBottom) && is_double_bottom(&stock.history, timeline) {
+        agent.buy(stock, h);
     }
 }
