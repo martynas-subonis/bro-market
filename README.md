@@ -4,6 +4,27 @@
 Monte Carlo simulation of a stock market with independent agents, where agents buy/sell stocks depending on their
 trading strategies (signals), while the stocks move completely randomly.
 
+## Table of Contents
+
+1. [Setup](#setup)
+2. [Market Rules](#market-rules)
+3. [Results](#results)
+4. [Conclusions](#conclusions)
+
+## Setup
+
+```bash
+curl https://sh.rustup.rs -sSf | sh
+cargo build --release
+```
+
+To run the Monte Carlo simulation or to display the statistics, run:
+
+```bash
+target/release/mc # Will take a bit
+target/release/stats
+```
+
 ## Market Rules
 
 The market is defined by these rules:
@@ -30,20 +51,6 @@ The market is defined by these rules:
 - The market is open 24/7.
 
 The Monte Carlo simulations run for **24000 hours** each, and in total, there are 5000 simulations.
-
-## Setup
-
-```bash
-curl https://sh.rustup.rs -sSf | sh
-cargo build --release
-```
-
-To run the Monte Carlo simulation or to display the statistics, run:
-
-```bash
-target/release/mc # Will take a bit
-target/release/stats
-```
 
 ## Results
 
