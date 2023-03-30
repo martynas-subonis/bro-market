@@ -1,35 +1,35 @@
 # bro-market
 
-<strong>bro-market</strong> is a satire project that aims to point-out the common trading fallacies in the stock market.
-It is a simple Monte Carlo simulation of a stock market with independent agents, where agents buy/sell stocks depending
-on their trading strategies (signals), while the stocks move completely randomly.
+`bro-market` is a satire project that aims to point out the common trading fallacies in the stock market. It is a simple
+Monte Carlo simulation of a stock market with independent agents, where agents buy/sell stocks depending on their
+trading strategies (signals), while the stocks move completely randomly.
+
+## Market Rules
 
 The market is defined by these rules:
 
-- The market is infinitely liquid, meaning that the user can buy and sell stocks at any time, without affecting the
+- The market is infinitely liquid, meaning that the agent can buy and sell stocks at any time, without affecting the
   price.
-- The market is composed of a set of stocks (5), each with the same starting price, that are not correlated with each
+- The market is composed of a set of 5 stocks, each with the same starting price, that are not correlated with each
   other.
-- The stock prices change randomly each hour, by a <strong>uniformly</strong>-random amount between <strong>-1% and
-  +1%</strong>.
-- The market consists of two independent agents, <strong>"Chad The Crypto King"</strong> and <strong>"Ben The Wall
-  Street Intern"</strong>.
+- The stock prices change randomly each hour, by a **uniformly**-random amount between **-1% and +1%**.
+- The market consists of two independent agents, **"Chad The Crypto King"** and **"Ben The Wall Street Intern"**.
 - If an agent detects an instrument buy signal, he will buy the instrument stocks with 40% of his total cash.
 - If an agent detects an instrument sell signal, he will panic and sell all his stocks for that particular instrument.
-- <strong>"Chad The Crypto King"</strong> uses
-  [head and shoulders bottom pattern](https://en.wikipedia.org/wiki/Head_and_shoulders_(chart_pattern)#Head_and_shoulders_bottom.)
-  to detect buy signals,
-  and [head and shoulders top pattern](https://en.wikipedia.org/wiki/Head_and_shoulders_(chart_pattern)#Head_and_shoulders_top.)
+- **"Chad The Crypto King"**
+  uses [head and shoulders bottom pattern](https://en.wikipedia.org/wiki/Head_and_shoulders_(chart_pattern)#Head_and_shoulders_bottom)
+  to detect buy signals
+  and [head and shoulders top pattern](https://en.wikipedia.org/wiki/Head_and_shoulders_(chart_pattern)#Head_and_shoulders_top)
   to detect sell signals.
-- <strong>"Ben The Wall Street Intern"</strong> uses
-  [double-bottom pattern](https://en.wikipedia.org/wiki/Double_top_and_double_bottom#Double_bottom) to detect buy
-  signals, and
-  [double-top](https://en.wikipedia.org/wiki/Double_top_and_double_bottom#Double_top) pattern to detect sell signals.
-- Each trade costs <strong>0.5%</strong> of the total value of the transaction.
-- The agents start with <strong>10000 USD</strong> each.
+- **"Ben The Wall Street Intern"**
+  uses [double-bottom pattern](https://en.wikipedia.org/wiki/Double_top_and_double_bottom#Double_bottom) to detect buy
+  signals and [double-top pattern](https://en.wikipedia.org/wiki/Double_top_and_double_bottom#Double_top) to detect sell
+  signals.
+- Each trade costs **0.5%** of the total value of the transaction.
+- The agents start with **10000 USD** each.
 - The market is open 24/7.
 
-The Monte Carlo simulations run for <strong>24000 hours</strong> each, and in total there are 5000 simulations.
+The Monte Carlo simulations run for **24000 hours** each, and in total, there are 5000 simulations.
 
 ## Setup
 

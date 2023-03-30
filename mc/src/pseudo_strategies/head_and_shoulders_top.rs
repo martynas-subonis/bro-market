@@ -3,7 +3,10 @@ use lib::NUMBER_OF_HOURS;
 
 const HEAD_AND_SHOULDERS_TOP_PARTITIONS: usize = 6;
 
-pub fn is_head_and_shoulders_top(price_series: &Vec<f64>, timeline: &[f64; NUMBER_OF_HOURS]) -> bool {
+pub fn is_head_and_shoulders_top(
+    price_series: &Vec<f64>,
+    timeline: &[f64; NUMBER_OF_HOURS],
+) -> bool {
     return match_series(
         price_series,
         HEAD_AND_SHOULDERS_TOP_PARTITIONS,

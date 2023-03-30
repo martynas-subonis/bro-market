@@ -1,6 +1,6 @@
 use crate::domain_models::agent::Agent;
 use crate::domain_models::agent::Strategies::{
-    DoubleBottom, DoubleTop, HeadAndShouldersTop, HeadAndShouldersBottom,
+    DoubleBottom, DoubleTop, HeadAndShouldersBottom, HeadAndShouldersTop,
 };
 use lib::{BEN_NAME, CHAD_NAME, DEFAULT_STARTING_CASH};
 use std::collections::{HashMap, HashSet};
