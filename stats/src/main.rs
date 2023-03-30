@@ -4,6 +4,7 @@ use crate::math::round_to_precision;
 use lib::{AgentRunStats, BEN_NAME, CHAD_NAME, DEFAULT_STARTING_CASH, OUTPUT_FILE_NAME};
 use ndarray::{Array, Ix1};
 use plotters::prelude::*;
+use prettytable::{format, row, Cell, Row, Table};
 use serde_json;
 use std::collections::HashMap;
 use std::fs::File;
@@ -128,21 +129,60 @@ fn get_color(key: &String) -> RGBAColor {
 }
 
 fn stdout_stats(data: &HashMap<String, Vec<AgentRunStats>>) {
-    for (agent, run_stats) in data.iter() {
-        let (trade_count_array, net_worth_array) = vec_to_arrays(run_stats);
+    let mut table = Table::new();
+    table.set_format(*format::consts::FORMAT_DEFAULT);
+    let mut header = Row::new(vec![Cell::new("Simulation Statistics")]);
+    for agent in data.keys() {
+        header.add_cell(Cell::new(agent));
+    }
+    table.add_row(header);
+    let mut net_mean_row = row!["Net avg."];
+    let mut trade_count_mean_row = row!["Trade count avg"];
+    let mut avg_profit_row = row!["Avg. profit"];
+    let mut random_profit_prob_row = row!["Profit p"];
+    let mut random_2x_prob_row = row!["2x p"];
+    let mut random_3x_prob_row = row!["3x p"];
+    let mut random_5x_prob_row = row!["5x p"];
 
+    for run_stats in data.values() {
+        let (trade_count_array, net_worth_array) = vec_to_arrays(run_stats);
         let (net_mean, net_std) = calc_stats(&net_worth_array);
         let (trade_count_mean, trade_count_std) = calc_stats(&trade_count_array);
-        let delta = (net_mean - DEFAULT_STARTING_CASH) / DEFAULT_STARTING_CASH * 100.0;
 
-        println!(
-            "{} statistics:\n\
-            Net Worth: {:.2} ± {:.2}\n\
-            Trade Count: {:.2} ± {:.2}\n\
-            % delta: {:.2}\n",
-            agent, net_mean, net_std, trade_count_mean, trade_count_std, delta
-        );
+        net_mean_row.add_cell(Cell::new(&format!("{:.2} ± {:.2}", net_mean, net_std)));
+        trade_count_mean_row.add_cell(Cell::new(&format!(
+            "{:.2} ± {:.2}",
+            trade_count_mean, trade_count_std
+        )));
+        avg_profit_row.add_cell(Cell::new(&format!(
+            "{:.2}%",
+            (net_mean - DEFAULT_STARTING_CASH) / DEFAULT_STARTING_CASH * 100.0
+        )));
+        random_profit_prob_row.add_cell(Cell::new(&format!(
+            "{:.2}%",
+            calculate_probability(&net_worth_array, 1.0)
+        )));
+        random_2x_prob_row.add_cell(Cell::new(&format!(
+            "{:.2}%",
+            calculate_probability(&net_worth_array, 2.0)
+        )));
+        random_3x_prob_row.add_cell(Cell::new(&format!(
+            "{:.2}%",
+            calculate_probability(&net_worth_array, 3.0)
+        )));
+        random_5x_prob_row.add_cell(Cell::new(&format!(
+            "{:.2}%",
+            calculate_probability(&net_worth_array, 5.0)
+        )));
     }
+    table.add_row(net_mean_row);
+    table.add_row(trade_count_mean_row);
+    table.add_row(avg_profit_row);
+    table.add_row(random_profit_prob_row);
+    table.add_row(random_2x_prob_row);
+    table.add_row(random_3x_prob_row);
+    table.add_row(random_5x_prob_row);
+    table.printstd();
 }
 
 fn vec_to_arrays(run_stats: &Vec<AgentRunStats>) -> (Array<f64, Ix1>, Array<f64, Ix1>) {
@@ -159,4 +199,13 @@ fn calc_stats(array: &Array<f64, Ix1>) -> (f64, f64) {
     let mean = array.mean().unwrap();
     let std = array.std(0.0);
     (mean, std)
+}
+
+fn calculate_probability(net_worth_array: &Array<f64, Ix1>, multiplier: f64) -> f64 {
+    net_worth_array
+        .iter()
+        .filter(|&x| *x > multiplier * DEFAULT_STARTING_CASH)
+        .count() as f64
+        / net_worth_array.len() as f64
+        * 100.0
 }
