@@ -5,7 +5,7 @@ use lib::{AgentRunStats, BEN_NAME, CHAD_NAME, DEFAULT_STARTING_CASH, OUTPUT_FILE
 use ndarray::{Array, Ix1};
 use plotters::prelude::*;
 use prettytable::{format, row, Cell, Row, Table};
-use serde_json;
+
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::BufReader;
@@ -43,7 +43,7 @@ pub fn main() {
 fn load_data() -> HashMap<String, Vec<AgentRunStats>> {
     let file = File::open(OUTPUT_FILE_NAME).unwrap();
     let reader = BufReader::new(file);
-    return serde_json::from_reader(reader).unwrap();
+    serde_json::from_reader(reader).unwrap()
 }
 
 fn draw_histogram<F>(
@@ -76,7 +76,7 @@ fn draw_histogram<F>(
     chart
         .configure_mesh()
         .disable_x_mesh()
-        .bold_line_style(&BLACK.mix(0.3))
+        .bold_line_style(BLACK.mix(0.3))
         .y_desc(y_axis_label)
         .y_label_style(("sans-serif", 20))
         .x_desc(x_axis_label)
@@ -109,9 +109,9 @@ fn draw_histogram<F>(
 
     chart
         .configure_series_labels()
-        .border_style(&BLACK)
+        .border_style(BLACK)
         .legend_area_size(30)
-        .background_style(&WHITE.mix(0.8))
+        .background_style(WHITE.mix(0.8))
         .label_font(("sans-serif", 20))
         .draw()
         .unwrap();

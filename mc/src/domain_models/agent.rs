@@ -29,7 +29,7 @@ pub struct Agent<'a> {
 }
 
 impl Agent<'_> {
-    pub fn buy(&mut self, stock: &Stock, time: usize) -> () {
+    pub fn buy(&mut self, stock: &Stock, time: usize)  {
         let trade_amount = TRADE_FRACTION * self.cash;
         let fee_amount = TRADING_FEE * trade_amount;
         self.cash -= trade_amount;
@@ -53,7 +53,7 @@ impl Agent<'_> {
         });
     }
 
-    pub fn sell(&mut self, stock: &Stock, time: usize) -> () {
+    pub fn sell(&mut self, stock: &Stock, time: usize)  {
         let stock_id = stock.id.clone();
         let stock_id_clone = stock_id.clone();
 

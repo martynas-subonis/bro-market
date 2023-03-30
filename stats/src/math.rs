@@ -2,8 +2,8 @@ use lib::DEFAULT_STARTING_CASH;
 use ndarray::{Array, Ix1};
 
 pub fn round_to_precision(num: u32, p: u32) -> u32 {
-    let rounded = (num / p) * p;
-    return rounded;
+    
+    (num / p) * p
 }
 
 pub fn calc_stats(array: &Array<f64, Ix1>) -> (f64, f64) {

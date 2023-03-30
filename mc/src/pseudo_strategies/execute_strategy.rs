@@ -14,7 +14,7 @@ pub fn execute_strategy(
     agent: &mut Agent,
     h: usize,
     timeline: &[f64; NUMBER_OF_HOURS],
-) -> () {
+)  {
     if agent.strategies.contains(&HeadAndShouldersTop) {
         if is_head_and_shoulders_top(&stock.history, timeline) {
             agent.sell(stock, h);
