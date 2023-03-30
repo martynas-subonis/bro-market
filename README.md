@@ -72,24 +72,24 @@ target/release/stats
 
 ## Conclusions
 
-At the first sight - the results are quite obvious. <strong>"Chad The Crypto King"</strong> and "Ben The Wall Street
+At the first sight - the results are quite obvious. **"Chad The Crypto King"** and "Ben The Wall Street
 Intern" are complete failures. They both lose money, and they both lose it fast.
 
 But jokes aside, let's look a bit deeper. It was quite expected, that the average networth of the agents will have
-experienced negative gains, since the stocks are move randomly and there is a trade cost. But with this simulation,
-I wanted to look at a different aspects:
+experienced negative gains, since the stocks move randomly and there is a trade cost. But with this simulation,
+I wanted to look at different aspects:
 
 - Probability of randomly getting positive gains;
 - The fact that these popular/"established" trading patterns can happen by random;
 
-As there is not much to add on the second point, let's focus on the first one. While on average bros lost money - some
-of them got quite lucky. In fact, 2.82% of the simulations resulted in Chad getting more than 2x returns. For >5x
-returns, the probability is <strong>0.06%</strong> and <strong>0.10%</strong> for Chad and Ben respectively. If this
-simulation used ten million agents (approx. to real market) instead of two - we would have <strong>6000</strong> Chads
-and <strong>10000</strong> interns packing five-baggers. That's a lot of people making money in the stock market just by
+As there is not much to add to the second point, let's focus on the first one. While on average bros lost money - some
+of them got quite lucky. **2.82%** of the simulations resulted in Chad getting more than **2x** returns. For **>5x**
+returns, the probability is **0.06%** and **0.10%** for Chad and Ben respectively. If this
+simulation used ten million agents (approx. to real market) instead of two - we would have **6000** Chads
+and **10000** interns packing five-baggers. That's a lot of people making money in the stock market just by
 random. And the problem is - due to survivorship bias, we only hear about the Chads and the Bens, and not about the
 millions of other people who lost money.
 
-So the next time you hear about some super-star trader in social media, who made 500% returns in a year - assume that
-he/she is a scammer. And given the small probability that the person is not a scammer, maybe he/she is just got really
+So the next time you hear about some super-star trader in social media, who made 500% returns in a year - assuming that
+he/she is a scammer. And given the small probability that the person is not a scammer, maybe he/she just got really
 lucky. So don't feel pressured to buy Rivian nr. 2 or some to-the-moon coins. Just relax and enjoy the ride.
