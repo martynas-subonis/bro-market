@@ -46,6 +46,7 @@ fn load_data() -> HashMap<String, Vec<AgentRunStats>> {
     serde_json::from_reader(reader).unwrap()
 }
 
+#[allow(clippy::too_many_arguments)]
 fn draw_histogram<F>(
     data: &HashMap<String, Vec<AgentRunStats>>,
     plot_file_name: &str,
