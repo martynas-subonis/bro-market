@@ -1,6 +1,6 @@
 use crate::domain_models::agent::Agent;
 use crate::domain_models::agent::Strategies::{
-    DoubleBottom, DoubleTop, HeadAndShoulders, ReverseHeadAndShoulders,
+    DoubleBottom, DoubleTop, HeadAndShouldersTop, HeadAndShouldersBottom,
 };
 use lib::{BEN_NAME, CHAD_NAME, DEFAULT_STARTING_CASH};
 use std::collections::{HashMap, HashSet};
@@ -10,7 +10,7 @@ pub fn get_bros() -> Vec<Agent<'static>> {
         name: CHAD_NAME,
         portfolio: HashMap::new(),
         cash: DEFAULT_STARTING_CASH,
-        strategies: HashSet::from([HeadAndShoulders, ReverseHeadAndShoulders]),
+        strategies: HashSet::from([HeadAndShouldersTop, HeadAndShouldersBottom]),
         trades: Vec::new(),
     };
     let ben = Agent {

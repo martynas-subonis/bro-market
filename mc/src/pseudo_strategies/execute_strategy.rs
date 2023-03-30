@@ -1,12 +1,12 @@
 use crate::domain_models::agent::Agent;
 use crate::domain_models::agent::Strategies::{
-    DoubleBottom, DoubleTop, HeadAndShoulders, ReverseHeadAndShoulders,
+    DoubleBottom, DoubleTop, HeadAndShouldersTop, HeadAndShouldersBottom,
 };
 use crate::domain_models::stock::Stock;
 use crate::pseudo_strategies::double_bottom::is_double_bottom;
 use crate::pseudo_strategies::double_top::is_double_top;
-use crate::pseudo_strategies::head_and_shoulders::is_head_and_shoulders;
-use crate::pseudo_strategies::reverse_head_and_shoulders::is_reverse_head_and_shoulders;
+use crate::pseudo_strategies::head_and_shoulders_top::is_head_and_shoulders_top;
+use crate::pseudo_strategies::head_and_shoulders_bottom::is_head_and_shoulders_bottom;
 use lib::NUMBER_OF_HOURS;
 
 pub fn execute_strategy(
@@ -15,13 +15,13 @@ pub fn execute_strategy(
     h: usize,
     timeline: &[f64; NUMBER_OF_HOURS],
 ) -> () {
-    if agent.strategies.contains(&HeadAndShoulders) {
-        if is_head_and_shoulders(&stock.history, timeline) {
+    if agent.strategies.contains(&HeadAndShouldersTop) {
+        if is_head_and_shoulders_top(&stock.history, timeline) {
             agent.sell(stock, h);
         }
     }
-    if agent.strategies.contains(&ReverseHeadAndShoulders) {
-        if is_reverse_head_and_shoulders(&stock.history, timeline) {
+    if agent.strategies.contains(&HeadAndShouldersBottom) {
+        if is_head_and_shoulders_bottom(&stock.history, timeline) {
             agent.buy(stock, h);
         }
     }
