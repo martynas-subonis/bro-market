@@ -1,9 +1,7 @@
 use crate::domain_models::stock::Stock;
+use lib::{TRADE_FRACTION, TRADING_FEE};
 use std::collections::hash_map::Entry::Vacant;
 use std::collections::{HashMap, HashSet};
-
-const TRADE_FRACTION: f64 = 0.4;
-const TRADING_FEE: f64 = 0.005;
 
 #[derive(Debug, PartialEq, Eq, Hash)]
 pub enum Strategies {

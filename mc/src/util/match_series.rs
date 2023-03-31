@@ -1,9 +1,7 @@
 use crate::util::partitions::create_partitions;
 use crate::util::windows::create_available_windows;
-use lib::NUMBER_OF_HOURS;
+use lib::{ALLOWED_RELATIVE_DIFF, NUMBER_OF_HOURS};
 use linreg::linear_regression;
-
-const ALLOWED_RELATIVE_DIFF: f64 = 0.3;
 
 pub fn match_series(
     price_series: &Vec<f64>,

@@ -1,8 +1,6 @@
+use lib::{ABS_NOISE, RELATIVE_NOISE};
 use rand::distributions::{Distribution, Uniform};
 use rand::prelude::ThreadRng;
-
-const ABS_NOISE: f64 = 0.001;
-const RELATIVE_NOISE: f64 = 0.01;
 
 pub struct StochasticProcess {
     pub rel_dist: Uniform<f64>,

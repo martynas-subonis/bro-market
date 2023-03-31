@@ -6,14 +6,12 @@ use crate::domain_models::bros::create_bros;
 use crate::domain_models::stochastic::StochasticProcess;
 use crate::domain_models::stock::create_stocks;
 use crate::pseudo_strategies::execute_strategy::execute_strategy;
-use lib::{AgentRunStats, NUMBER_OF_HOURS, OUTPUT_FILE_NAME};
+use lib::{AgentRunStats, NUMBER_OF_HOURS, NUMBER_OF_SIMULATIONS, OUTPUT_FILE_NAME};
 use rayon::prelude::*;
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
 use std::time::Instant;
-
-const NUMBER_OF_SIMULATIONS: usize = 5000;
 
 fn main() {
     println!("Running bro market simulation...");
