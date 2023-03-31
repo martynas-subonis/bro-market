@@ -97,6 +97,6 @@ and **10000** interns packing five-baggers. That's a lot of people making money 
 random. And the problem is - due to survivorship bias, we only hear about the Chads and the Bens, and not about the
 millions of other people who lost money.
 
-So the next time you hear about some super-star trader in social media, who made 500% returns in a year - assuming that
+So the next time you hear about some super-star trader in social media, who made 500% returns in a year - assume that
 he/she is a scammer. And given the small probability that the person is not a scammer, maybe he/she just got really
 lucky. So don't feel pressured to buy Rivian nr. 2 or some to-the-moon coins. Just relax and enjoy the ride.
