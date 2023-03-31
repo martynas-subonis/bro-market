@@ -79,8 +79,8 @@ The Monte Carlo simulations run for **24000 hours** each, and in total, there ar
 
 ## Conclusions
 
-At the first sight - the results are quite obvious. **"Chad The Crypto King"** and "Ben The Wall Street
-Intern" are complete failures. They both lose money, and they both lose it fast.
+At the first sight - the results are quite obvious. **"Chad The Crypto King"** and **"Ben The Wall Street
+Intern"** are complete failures. They both lose money, and they both lose it fast.
 
 But jokes aside, let's look a bit deeper. It was quite expected, that the average networth of the agents will have
 experienced negative gains, since the stocks move randomly and there is a trade cost. But with this simulation,
