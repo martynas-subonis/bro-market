@@ -1,7 +1,10 @@
 mod math;
 
 use crate::math::{calc_stats, calculate_networth_probability, round_to_precision};
-use lib::{AgentRunStats, BEN_NAME, CHAD_NAME, DEFAULT_STARTING_CASH, OUTPUT_FILE_NAME};
+use lib::{
+    AgentRunStats, BEN_NAME, CHAD_NAME, DEFAULT_STARTING_CASH, NETWORTH_PLOT_FILE_NAME,
+    OUTPUT_FILE_NAME, TRADE_COUNT_PLOT_FILE_NAME,
+};
 use ndarray::{Array, Ix1};
 use plotters::prelude::*;
 use prettytable::{format, row, Cell, Row, Table};
@@ -9,9 +12,6 @@ use prettytable::{format, row, Cell, Row, Table};
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::BufReader;
-
-const NETWORTH_PLOT_FILE_NAME: &str = "generated/networth.png";
-const TRADE_COUNT_PLOT_FILE_NAME: &str = "generated/trade_count.png";
 
 pub fn main() {
     let data = load_data();

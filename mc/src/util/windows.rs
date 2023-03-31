@@ -1,8 +1,4 @@
-const SCALE_FACTOR: usize = 36;
-
-const SMALL_WINDOW: usize = SCALE_FACTOR;
-const MEDIUM_WINDOW: usize = SMALL_WINDOW * SCALE_FACTOR;
-const LARGE_WINDOW: usize = MEDIUM_WINDOW * SCALE_FACTOR;
+use lib::{LARGE_WINDOW, MEDIUM_WINDOW, SMALL_WINDOW};
 
 pub fn create_available_windows(n: usize) -> Vec<usize> {
     vec![LARGE_WINDOW, MEDIUM_WINDOW, SMALL_WINDOW]
