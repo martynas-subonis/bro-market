@@ -5,7 +5,7 @@ use crate::domain_models::agent::Strategies::{
 use lib::{BEN_NAME, CHAD_NAME, DEFAULT_STARTING_CASH};
 use std::collections::{HashMap, HashSet};
 
-pub fn get_bros() -> Vec<Agent<'static>> {
+pub fn create_bros() -> Vec<Agent<'static>> {
     let chad = Agent {
         name: CHAD_NAME,
         portfolio: HashMap::new(),

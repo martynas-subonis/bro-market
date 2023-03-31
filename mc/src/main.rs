@@ -2,9 +2,9 @@ mod domain_models;
 mod pseudo_strategies;
 mod util;
 
-use crate::domain_models::bros::get_bros;
+use crate::domain_models::bros::create_bros;
 use crate::domain_models::stochastic::StochasticProcess;
-use crate::domain_models::stock::get_stocks;
+use crate::domain_models::stock::create_stocks;
 use crate::pseudo_strategies::execute_strategy::execute_strategy;
 use lib::{AgentRunStats, NUMBER_OF_HOURS, OUTPUT_FILE_NAME};
 use rayon::prelude::*;
@@ -53,8 +53,8 @@ fn simulate_single_run(
 ) -> HashMap<&'static str, Vec<AgentRunStats>> {
     let start = Instant::now();
     let mut sp = StochasticProcess::default();
-    let mut stocks = get_stocks();
-    let mut bros = get_bros();
+    let mut stocks = create_stocks();
+    let mut bros = create_bros();
 
     for h in 1..NUMBER_OF_HOURS {
         for stock in stocks.iter_mut() {

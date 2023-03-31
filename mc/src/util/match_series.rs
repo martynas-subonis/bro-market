@@ -1,5 +1,5 @@
-use crate::util::partitions::get_partitions;
-use crate::util::windows::get_available_windows;
+use crate::util::partitions::create_partitions;
+use crate::util::windows::create_available_windows;
 use lib::NUMBER_OF_HOURS;
 use linreg::linear_regression;
 
@@ -12,21 +12,25 @@ pub fn match_series(
     matcher: fn(Vec<f64>) -> bool,
 ) -> bool {
     let n = price_series.len();
-    let available_windows = get_available_windows(n);
+    let available_windows = create_available_windows(n);
     if available_windows.is_empty() {
         return false;
     }
 
     for window in available_windows {
-        let partitions = get_partitions(window, price_series.len(), partitions_nums);
-        if matcher(get_partition_slopes(price_series, timeline, partitions)) {
+        let partitions = create_partitions(window, price_series.len(), partitions_nums);
+        if matcher(compute_partitions_slopes(
+            price_series,
+            timeline,
+            partitions,
+        )) {
             return true;
         }
     }
     false
 }
 
-fn get_partition_slopes(
+fn compute_partitions_slopes(
     price_series: &[f64],
     timeline: &[f64; NUMBER_OF_HOURS],
     p: Vec<usize>,
