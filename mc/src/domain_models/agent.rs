@@ -1,14 +1,15 @@
 use crate::domain_models::stock::Stock;
-use lib::{TRADE_FRACTION, TRADING_FEE};
+use lib::{NUMBER_OF_HOURS, TRADE_FRACTION, TRADING_FEE};
 use std::collections::hash_map::Entry::Vacant;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
-#[derive(Debug, PartialEq, Eq, Hash)]
-pub enum Strategies {
-    HeadAndShouldersTop,
-    HeadAndShouldersBottom,
-    DoubleTop,
-    DoubleBottom,
+pub trait Strategy {
+    fn should_buy(&self, _stock: &Stock, _timeline: &[f64; NUMBER_OF_HOURS]) -> bool {
+        false
+    }
+    fn should_sell(&self, _stock: &Stock, _timeline: &[f64; NUMBER_OF_HOURS]) -> bool {
+        false
+    }
 }
 
 #[derive(Debug, PartialEq)]
@@ -18,13 +19,12 @@ pub struct Trade {
     pub time: usize,
 }
 
-#[derive(Debug)]
 pub struct Agent<'a> {
     pub name: &'a str,
     pub portfolio: HashMap<String, f64>,
     pub cash: f64,
-    pub strategies: HashSet<Strategies>,
     pub trades: Vec<Trade>,
+    pub strategy: Box<dyn Strategy>,
 }
 
 impl Agent<'_> {
@@ -86,6 +86,8 @@ impl Agent<'_> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    struct MockStrategy;
+    impl Strategy for MockStrategy {}
 
     #[test]
     fn buys_first_stock() {
@@ -94,8 +96,8 @@ mod tests {
             name: "test",
             portfolio: Default::default(),
             cash: initial_cash,
-            strategies: HashSet::new(),
             trades: Vec::new(),
+            strategy: Box::new(MockStrategy),
         };
         let stock = Stock {
             id: "test".to_string(),
@@ -126,8 +128,8 @@ mod tests {
             name: "test",
             portfolio: HashMap::from([(stock.id.clone(), initial_amount)]),
             cash: initial_cash,
-            strategies: HashSet::new(),
             trades: Vec::new(),
+            strategy: Box::new(MockStrategy),
         };
         agent.buy(&stock, 1);
         assert_eq!(agent.portfolio[&stock.id], 1995.0);
@@ -147,8 +149,8 @@ mod tests {
             name: "test",
             portfolio: HashMap::from([(stock.id.clone(), initial_amount)]),
             cash: initial_cash,
-            strategies: HashSet::new(),
             trades: Vec::new(),
+            strategy: Box::new(MockStrategy),
         };
         agent.sell(&stock, 1);
         assert!(!agent.portfolio.contains_key(&stock.id));
@@ -173,8 +175,8 @@ mod tests {
             name: "test",
             portfolio: HashMap::from([(stock_one.id, initial_amount)]),
             cash: initial_cash,
-            strategies: HashSet::new(),
             trades: Vec::new(),
+            strategy: Box::new(MockStrategy),
         };
         agent.sell(&stock_two, 1);
         assert_eq!(agent.cash, initial_cash);
@@ -202,8 +204,8 @@ mod tests {
                 (stock_two.id, initial_amount),
             ]),
             cash: initial_cash,
-            strategies: HashSet::new(),
             trades: Vec::new(),
+            strategy: Box::new(MockStrategy),
         };
 
         let actual_net_worth = agent.get_net_worth(&stocks);
