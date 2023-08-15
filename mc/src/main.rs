@@ -5,7 +5,6 @@ mod util;
 use crate::domain_models::bros::create_bros;
 use crate::domain_models::stochastic::StochasticProcess;
 use crate::domain_models::stock::create_stocks;
-use crate::pseudo_strategies::execute_strategy::execute_strategy;
 use lib::{AgentRunStats, NUMBER_OF_HOURS, NUMBER_OF_SIMULATIONS, OUTPUT_FILE_NAME};
 use rayon::prelude::*;
 use std::collections::HashMap;
@@ -58,7 +57,12 @@ fn simulate_single_run(
         for stock in stocks.iter_mut() {
             stock.mv(&mut sp);
             for bro in bros.iter_mut() {
-                execute_strategy(stock, bro, h, timeline);
+                if bro.strategy.should_buy(stock, timeline) {
+                    bro.buy(stock, h)
+                }
+                if bro.strategy.should_sell(stock, timeline) {
+                    bro.sell(stock, h)
+                }
             }
         }
     }
